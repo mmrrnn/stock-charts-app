@@ -1,22 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { Ul } from './Navigation.css';
+import { signOutUser } from '../../data/actions/user-action';
 
-function SignedInLinks() {
+function SignedInLinks({ signOutUser }) {
+    const location = useLocation();
+    
     return (
         <>
             <Ul>
-                <li>
-                    <Link to="/charts">Charts</Link>
+                <li className={location.pathname === '/' ? 'active' : null}>
+                    <Link to="/">Charts</Link>
                 </li>
-                <li>
+                <li className={location.pathname === '/subscribed' ? 'active' : null}>
                     <Link to="/subscribed">Subscribed</Link>
                 </li>
             </Ul>
-            <div>Sign Out</div>
+            <button onClick={signOutUser} href="#">Sign Out</button>   
         </>
     )
 }
 
-export default SignedInLinks;
+export default connect(null, { signOutUser })(SignedInLinks);

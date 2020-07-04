@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { validate } from './validate';
 import { addUser } from '../../data/actions/user-action';
 
-function SignUp({ addUser }) {
+function SignUp({ addUser, authorized }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [retypedPassword, setRetypedPassword] = useState('');
     const [signUpError, setsignUpError] = useState({});
     
+    if(authorized) return <Redirect to="/" />;
+
     const handleSubmit = e => {
         e.preventDefault();
         const isDataCorrect = validate({ username, password, retypedPassword, signUpError, setsignUpError });
@@ -73,8 +76,11 @@ function SignUp({ addUser }) {
     )
 }
 
-const mapDispatchToProps = {
-    addUser
-}
-
-export default connect(null, mapDispatchToProps)(SignUp);
+export default connect(
+    state => {
+        return {
+            authorized: state.data.authorized
+        }
+    },
+    { addUser }
+)(SignUp);

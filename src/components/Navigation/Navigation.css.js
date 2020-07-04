@@ -7,6 +7,15 @@ export const Nav = styled.nav`
     div#stock-charts-brand {
         color: ${({ theme }) => theme.colors.blue};
     }
+
+    button {
+        border: none;
+        background-color: transparent;
+    }
+
+    button:hover {
+        color: ${({ theme }) => theme.colors.blue};
+    }
 `;
 
 export const Ul = styled.ul`
@@ -16,6 +25,10 @@ export const Ul = styled.ul`
     padding: 0;
 
     li {
-        padding-right: ${({ theme }) => theme.spacing.medium};
+        padding-left: ${({ theme }) => theme.spacing.medium};
+    }
+
+    li.active a {
+        color: ${({ theme }) => theme.colors.blue};
     }
 `;

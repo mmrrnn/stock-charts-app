@@ -1,11 +1,13 @@
 import {
     LOADING,
-    LOADED,
-    FAILED,
     USER_ADD_REQUEST,
     USER_ADD_SUCCESS,
     USER_ADD_FAILURE,
-    
+    SIGN_IN_REQUEST,
+    SIGN_IN_SUCCESS,
+    SIGN_IN_FAILURE,
+    SIGN_OUT
+
 } from '../constants';
 
 const initialState = {
@@ -16,10 +18,10 @@ const initialState = {
     error: null
 }
 
-export default function user(state = initialState, action){
+export default function user(state = initialState, action) {
     const newLoadingState = { ...state.loadingState };
-    
-    switch(action.type){
+
+    switch (action.type) {
         case USER_ADD_REQUEST:
             return {
                 ...state,
@@ -35,6 +37,7 @@ export default function user(state = initialState, action){
                 ...state,
                 authorized: true,
                 user: action.payload,
+                error: null,
                 loadingState: newLoadingState
             };
         case USER_ADD_FAILURE:
@@ -47,6 +50,45 @@ export default function user(state = initialState, action){
                 authorized: false,
                 loadingState: newLoadingState
             }
+
+        // SIGN IN 
+
+        case SIGN_IN_REQUEST:
+            return {
+                ...state,
+                loadingState: {
+                    ...state.loadingState,
+                    [action.type]: LOADING
+                }
+            };
+        case SIGN_IN_SUCCESS:
+            delete newLoadingState.SIGN_IN_REQUEST;
+
+            return {
+                ...state,
+                authorized: true,
+                user: action.payload,
+                error: null,
+                loadingState: newLoadingState
+            };
+        case SIGN_IN_FAILURE:
+            delete newLoadingState.SIGN_IN_REQUEST;
+
+            return {
+                ...state,
+                user: {},
+                error: action.payload,
+                authorized: false,
+                loadingState: newLoadingState
+            }
+
+        // SIGN OUT
+        case SIGN_OUT:
+            return {
+                ...state,
+                authorized: false,
+                user: {}
+            };
         default:
             return state;
     }

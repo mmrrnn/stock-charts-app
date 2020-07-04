@@ -17,8 +17,7 @@ export default function promiseMiddleware(){
                 .then(response => response.json())
                 .then(data => {
                     if(data.error) throw new Error(data.message);
-
-                    console.log(`User ${data.username} added!`)
+                    
                     next({ 
                         ...rest,
                         type: SUCCESS,
@@ -26,7 +25,7 @@ export default function promiseMiddleware(){
                     })
                 })
                 .catch(error => {
-                    console.log(error.message);
+                    // console.log(error.message);
                     next({
                         ...rest,
                         type: FAILURE,

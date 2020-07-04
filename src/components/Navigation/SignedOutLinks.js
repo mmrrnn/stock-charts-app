@@ -1,18 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { Ul } from './Navigation.css';
 
 function SignedOutLinks() {
+    const location = useLocation();
+    
     return (
         <>
             <div id="stock-charts-brand">Stock Charts</div>
             <Ul>
-                <li>
-                    <Link to="signin">Sign In</Link>
+                <li className={location.pathname === '/signin' ? 'active' : null}>
+                    <Link to="/signin">Sign In</Link>
                 </li>
-                <li>
-                    <Link to="signup">Sign Up</Link>
+                <li className={location.pathname === '/signup' ? 'active' : null}>
+                    <Link to="/signup">Sign Up</Link>
                 </li>
             </Ul>
         </>

@@ -1,5 +1,7 @@
 import {
-    USER_ADD
+    USER_ADD,
+    SIGN_IN,
+    SIGN_OUT
 } from '../constants';
 
 export const addUser = user => {
@@ -11,13 +13,39 @@ export const addUser = user => {
                 'Content-type': "application/json"
             },
             body: JSON.stringify(user)
-        }        
+        }
     );
-    
+
     return {
         type: USER_ADD,
         promise,
         successMessage: `User ${user.username} has been added!`,
-        failureMessage: `ERROR, check the console!`
+        failureMessage: `Sign Up error, check the console!`
+    }
+}
+
+export const signInUser = ({ username, password }) => {
+    const promise = fetch(
+        `http://localhost:5000/users/signin`,
+        {
+            method: "POST",
+            headers: {
+                'Content-type': "application/json"
+            },
+            body: JSON.stringify({ username, password })
+        }
+    )
+    
+    return {
+        type: SIGN_IN,
+        promise,
+        failureMessage: `Sign In error, check the console!`
+    }
+}
+
+export const signOutUser = () => {
+    return {
+        type: SIGN_OUT,
+        failureMessage: "Sign Out error, check the console!"
     }
 }

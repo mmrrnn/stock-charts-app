@@ -1,15 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default function SignIn() {
+import { signInUser } from '../../data/actions/user-action';
+
+function SignIn({ signInUser, authorized }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     
+    if (authorized) return <Redirect to='/' />;
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        
+        signInUser({ username, password });
+    }
+
     return (
         <div className="container">
             <h2 className="text-center text-primary">Sign In</h2>
             <div className="row justify-content-md-center">
                 <div className="col-12 col-md-8 col-lg-6">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="username">Username</label>
                             <input
@@ -39,3 +51,12 @@ export default function SignIn() {
         </div>
     )
 }
+
+export default connect(
+    state => {
+        return {
+            authorized: state.data.authorized
+        }
+    },
+    { signInUser }
+)(SignIn);

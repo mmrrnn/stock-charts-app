@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { Nav } from './Navigation.css';
 import SignedInLinks from './SignedInLinks';
@@ -12,4 +13,10 @@ function Navigation({ authorized }) {
     )
 }
 
-export default Navigation;
+export default connect(
+    state => {
+        return {
+            authorized: state.data.authorized
+        }
+    } 
+)(Navigation);
