@@ -10,6 +10,17 @@ const userSchema = new Schema({
     trim: true,
     minlength: 3
   },
+  password: {
+    type: String,
+    required: true,
+    unique: false,
+    minlength: 3
+  },
+  subscribedStockCharts: {
+    type: Array,
+    required: true,
+    unique: false,
+  }
 }, {
   timestamps: true,
 });

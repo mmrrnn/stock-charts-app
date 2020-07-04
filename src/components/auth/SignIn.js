@@ -6,7 +6,7 @@ export default function SignIn() {
     
     return (
         <div className="container">
-            <h2 class="text-center text-primary">Sign In</h2>
+            <h2 className="text-center text-primary">Sign In</h2>
             <div className="row justify-content-md-center">
                 <div className="col-12 col-md-8 col-lg-6">
                     <form>

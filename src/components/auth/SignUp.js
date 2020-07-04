@@ -1,16 +1,34 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 
-export default function SignUp() {
+import { validate } from './validate';
+import { addUser } from '../../data/actions/user-action';
+
+function SignUp({ addUser }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [retypedPassword, setRetypedPassword] = useState('');
+    const [signUpError, setsignUpError] = useState({});
     
+    const handleSubmit = e => {
+        e.preventDefault();
+        const isDataCorrect = validate({ username, password, retypedPassword, signUpError, setsignUpError });
+        
+        if(isDataCorrect){
+            addUser({
+                username,
+                password,
+                subscribedStockCharts: []
+            });
+        }
+    }
+
     return (
         <div className="container">
-            <h2 class="text-center text-primary">Sign Up</h2>
+            <h2 className="text-center text-primary">Sign Up</h2>
             <div className="row justify-content-md-center">
                 <div className="col-12 col-md-8 col-lg-6">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="username">Username</label>
                             <input
@@ -21,6 +39,7 @@ export default function SignUp() {
                                 required
                                 onChange={e => setUsername(e.target.value)}
                             />
+                            { signUpError.username ? <div className="text-danger">Type correct username</div> : null }
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
@@ -32,6 +51,7 @@ export default function SignUp() {
                                 required
                                 onChange={e => setPassword(e.target.value)}
                             />
+                            { signUpError.password ? <div className="text-danger">Type correct password</div> : null }
                         </div>
                         <div className="form-group">
                             <label htmlFor="retypedPassword">Retype password</label>
@@ -43,6 +63,7 @@ export default function SignUp() {
                                 required
                                 onChange={e => setRetypedPassword(e.target.value)}
                             />
+                            { signUpError.retypedPassword ? <div className="text-danger">Passwords must be the same</div> : null }
                         </div>
                         <button type="submit" className="btn btn-primary float-right">Submit</button>
                     </form>
@@ -51,3 +72,9 @@ export default function SignUp() {
         </div>
     )
 }
+
+const mapDispatchToProps = {
+    addUser
+}
+
+export default connect(null, mapDispatchToProps)(SignUp);

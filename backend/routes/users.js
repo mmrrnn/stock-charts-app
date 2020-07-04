@@ -7,14 +7,16 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/add').post((req, res) => {
+router.route('/add').post((req, res, next) => {
   const username = req.body.username;
+  const password = req.body.password;
+  const subscribedStockCharts = req.body.subscribedStockCharts;
 
-  const newUser = new User({username});
-
+  const newUser = new User({ username, password, subscribedStockCharts });
+  
   newUser.save()
-    .then(() => res.json('User added!'))
-    .catch(err => res.status(400).json('Error: ' + err));
+    .then(() => res.json({ username, subscribedStockCharts }))
+    .catch(err => res.status(500).json({ error: true, message: "This username already exists!" }));
 });
 
 module.exports = router;

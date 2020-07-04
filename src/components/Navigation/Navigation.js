@@ -4,10 +4,10 @@ import { Nav } from './Navigation.css';
 import SignedInLinks from './SignedInLinks';
 import SignedOutLinks from './SignedOutLinks';
 
-function Navigation({ logged }) {
+function Navigation({ authorized }) {
     return (
         <Nav className="navbar navbar-light bg-light">
-            <SignedOutLinks />
+            {authorized ? <SignedInLinks /> : <SignedOutLinks />}
         </Nav>
     )
 }

@@ -1,0 +1,18 @@
+export const INITIAL = 'INITIAL';
+export const LOADING = 'LOADING';
+export const LOADED = 'LOADED';
+export const FAILED = 'FAILED';
+
+export const SIGN_UP = 'SIGN_UP';
+export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
+export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
+
+export const USER_ADD = 'USER_ADD';
+export const USER_ADD_REQUEST = 'USER_ADD_REQUEST';
+export const USER_ADD_SUCCESS = 'USER_ADD_SUCCESS';
+export const USER_ADD_FAILURE = 'USER_ADD_FAILURE';
+
+export const STOCK_CHARTS_GET = 'STOCK_CHARTS_GET';
+export const STOCK_CHARTS_GET_REQUEST = 'STOCK_CHARTS_GET_REQUEST';
+export const STOCK_CHARTS_GET_SUCCESS = 'STOCK_CHARTS_GET_SUCCESS';
+export const STOCK_CHARTS_GET_FAILURE = 'STOCK_CHARTS_GET_FAILURE';
