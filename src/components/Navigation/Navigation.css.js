@@ -5,7 +5,7 @@ export const Nav = styled.nav`
     margin-bottom: 4rem;
 
     div#stock-charts-brand {
-        color: ${({ theme }) => theme.colors.blue};
+        font-weight: bold;
     }
 
     button {

@@ -10,13 +10,13 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
-  const subscribedStockCharts = req.body.subscribedStockCharts;
+  const subscribedStock = req.body.subscribedStock;
 
-  const newUser = new User({ username, password, subscribedStockCharts });
+  const newUser = new User({ username, password, subscribedStock });
   
   newUser.save()
-    .then(() => res.json({ username, subscribedStockCharts }))
-    .catch(err => res.json({ error: true, message: "This username already exists!" }));
+    .then(() => res.json({ username, subscribedStock }))
+    .catch(err => res.json(err));
 });
 
 router.route('/signin').post((req, res) => {
@@ -32,7 +32,7 @@ router.route('/signin').post((req, res) => {
     })
     .then(filteredUser => res.json({
       username: filteredUser[0].username,
-      subscribedStockCharts: filteredUser[0].subscribedStockCharts
+      subscribedStock: filteredUser[0].subscribedStock
     }))
     .catch(err => res.json({ error: true, message: "Incorrect username or password!" }));
 });

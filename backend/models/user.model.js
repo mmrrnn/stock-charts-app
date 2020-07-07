@@ -16,10 +16,10 @@ const userSchema = new Schema({
     unique: false,
     minlength: 3
   },
-  subscribedStockCharts: {
-    type: Array,
-    required: true,
-    unique: false,
+  subscribedStock: {
+    type: String,
+    required: false,
+    unique: false
   }
 }, {
   timestamps: true,

@@ -55,7 +55,7 @@ function SignIn({ signInUser, authorized }) {
 export default connect(
     state => {
         return {
-            authorized: state.data.authorized
+            authorized: state.user.authorized
         }
     },
     { signInUser }

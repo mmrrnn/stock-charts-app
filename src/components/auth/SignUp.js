@@ -21,7 +21,7 @@ function SignUp({ addUser, authorized }) {
             addUser({
                 username,
                 password,
-                subscribedStockCharts: []
+                subscribedStock: null
             });
         }
     }
@@ -79,7 +79,7 @@ function SignUp({ addUser, authorized }) {
 export default connect(
     state => {
         return {
-            authorized: state.data.authorized
+            authorized: state.user.authorized
         }
     },
     { addUser }

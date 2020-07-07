@@ -12,8 +12,8 @@ import {
 
 const initialState = {
     authorized: null,
-    user: {},
-    llStockCharts: {},
+    username: undefined,
+    subscribedStock: undefined,
     loadingState: null,
     error: null
 }
@@ -36,7 +36,8 @@ export default function user(state = initialState, action) {
             return {
                 ...state,
                 authorized: true,
-                user: action.payload,
+                username: action.payload.username,
+                subscribedStock: action.payload.subscribedStock,
                 error: null,
                 loadingState: newLoadingState
             };
@@ -45,7 +46,8 @@ export default function user(state = initialState, action) {
 
             return {
                 ...state,
-                user: {},
+                username: null,
+                subscribedStock: null,
                 error: action.payload,
                 authorized: false,
                 loadingState: newLoadingState
@@ -67,7 +69,8 @@ export default function user(state = initialState, action) {
             return {
                 ...state,
                 authorized: true,
-                user: action.payload,
+                username: action.payload.username,
+                subscribedStock: action.payload.subscribedStock,
                 error: null,
                 loadingState: newLoadingState
             };
@@ -76,7 +79,8 @@ export default function user(state = initialState, action) {
 
             return {
                 ...state,
-                user: {},
+                username: null,
+                subscribedStock: null,
                 error: action.payload,
                 authorized: false,
                 loadingState: newLoadingState
@@ -87,7 +91,8 @@ export default function user(state = initialState, action) {
             return {
                 ...state,
                 authorized: false,
-                user: {}
+                username: null,
+                subscribedStock: null,
             };
         default:
             return state;

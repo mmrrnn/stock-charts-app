@@ -12,6 +12,7 @@ import theme from './theme';
 import Navigation from './components/Navigation';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
+import StockChartsList from './components/StockChartsList/StockChartsList';
 
 toast.configure();
 
@@ -22,7 +23,7 @@ function App() {
         <Navigation />
 
         <Switch>
-          <Route exact path="/" />
+          <Route exact path="/" component={StockChartsList}/>
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
         </Switch>

@@ -15,7 +15,7 @@ export const addUser = user => {
             body: JSON.stringify(user)
         }
     );
-
+    
     return {
         type: USER_ADD,
         promise,
