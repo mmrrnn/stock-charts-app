@@ -10,9 +10,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import theme from './theme';
 import Navigation from './components/Navigation';
+import StockChartsList from './components/StockChartsList/StockChartsList';
+import StockChart from './components/StockChart/StockChart';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
-import StockChartsList from './components/StockChartsList/StockChartsList';
+
 
 toast.configure();
 
@@ -24,6 +26,7 @@ function App() {
 
         <Switch>
           <Route exact path="/" component={StockChartsList}/>
+          <Route path="/subscribed" component={StockChart} />
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
         </Switch>

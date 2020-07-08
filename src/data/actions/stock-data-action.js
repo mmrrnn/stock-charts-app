@@ -2,9 +2,12 @@ import {
     STOCK_DATA_GET
 } from '../constants';
 
-export const getStockData = selectedStock => {
+export const getStockData = ({ selectedStock, timeInterval = 'DAILY' }) => {
+    const timeSeries = timeInterval === 'DAILY' ? 'DAILY' : 'INTRADAY';
+    const interval = timeInterval !== 'DAILY' ? `&interval=${timeInterval}` : '';
+    
     const promise = fetch(
-        `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${selectedStock}&apikey=${process.env.REACT_APP_API_KEY}`
+        `https://www.alphavantage.co/query?function=TIME_SERIES_${timeSeries}&symbol=${selectedStock}${interval}&apikey=${process.env.REACT_APP_API_KEY}`
     );
     
     return {

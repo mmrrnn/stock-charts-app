@@ -1,7 +1,8 @@
 import {
     USER_ADD,
     SIGN_IN,
-    SIGN_OUT
+    SIGN_OUT,
+    TOGGLE_SUBSCRIBE_STOCK,
 } from '../constants';
 
 export const addUser = user => {
@@ -47,5 +48,24 @@ export const signOutUser = () => {
     return {
         type: SIGN_OUT,
         failureMessage: "Sign Out error, check the console!"
+    }
+}
+
+export const toggleSubscribeStock = ({ stockSymbol, username }) => {
+    const promise = fetch(
+        `http://localhost:5000/users/subscribe`,
+        {
+            method: "POST",
+            headers: {
+                'Content-type': "application/json"
+            },
+            body: JSON.stringify({ subscribedStock: stockSymbol, username })
+        }
+    )
+    
+    return {
+        type: TOGGLE_SUBSCRIBE_STOCK,
+        promise,
+        failureMessage: `Subscribing stock error, check the console!`
     }
 }

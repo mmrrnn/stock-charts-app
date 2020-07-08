@@ -10,4 +10,8 @@ export default createGlobalStyle`
     color: black;
     text-decoration: none!important;
   }
+
+  .mt-6 {
+    margin-top: 6rem!important;
+  }
 `;

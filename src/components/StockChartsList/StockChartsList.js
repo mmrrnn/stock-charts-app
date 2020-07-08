@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import StockChartSummary from '../StockChart/StockChartSummary';
 import { getStockData } from '../../data/actions/stock-data-action'
 
-function StockChartsList({ stockData = {}, getStockData }) {
+function StockChartsList({ stockData = {}, getStockData, authorized }) {
     const [selectedStock, setSelectedStock] = useState('GOOGL');
     
+    useEffect(() => {
+        if(Object.entries(stockData).length){
+            setSelectedStock(stockData['Meta Data']['2. Symbol'])
+        }
+    }, [authorized, stockData])
+
     const handleChange = e => {
         setSelectedStock(e.target.value);
     }
@@ -14,18 +20,18 @@ function StockChartsList({ stockData = {}, getStockData }) {
     const handleSubmit = e => {
         e.preventDefault();
 
-        getStockData(selectedStock);
+        getStockData({ selectedStock });
     }
 
     return (
         <div className="container">
             <h2 className="text-center text-primary">Find Stock Chart</h2>
 
-            <div className="row mt-5 d-flex justify-content-center mb-5">
+            <div className="row mt-4 d-flex justify-content-center mb-4">
                 <div className="col-12 col-md-8 col-lg-5">
                     <div className="form-group">
                         <label htmlFor="stockNames">Select stock name</label>
-                        <select className="form-control" id="stockNames" onChange={handleChange}>
+                        <select className="form-control" id="stockNames" onChange={handleChange} value={selectedStock}>
                             <option value="GOOGL">Alphabet Inc Class A</option>
                             <option value="AMZN">Amazon.com Inc.</option>
                             <option value="AAPL">Apple Inc.</option>
@@ -52,7 +58,8 @@ function StockChartsList({ stockData = {}, getStockData }) {
 export default connect(
     state => {
         return {
-            stockData: state.stockData.currentStockData
+            stockData: state.stockData.currentStockData,
+            authorized: state.user.authorized
         }
     }, 
     { getStockData }
