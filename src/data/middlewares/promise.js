@@ -18,6 +18,7 @@ export default function promiseMiddleware(){
                 .then(data => {
                     if(data.error) throw new Error(data.message);
                     if(data['Error Message']) throw new Error(data['Error Message']);
+                    if(data['Note']) throw new Error("Too many requests!");
                     
                     next({ 
                         ...rest,

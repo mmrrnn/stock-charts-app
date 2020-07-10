@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { Nav } from './Navigation.css';
@@ -11,6 +12,11 @@ function Navigation({ authorized }) {
             {authorized ? <SignedInLinks /> : <SignedOutLinks />}
         </Nav>
     )
+}
+
+
+Navigation.propTypes = {
+    authorized: PropTypes.bool.isRequired,
 }
 
 export default connect(

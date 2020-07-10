@@ -1,11 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import StockChartSummary from './StockChartSummary';
 import { getStockData } from '../../data/actions/stock-data-action';
 
-function StockChart({ subscribedStock, authorized, getStockData, stockData }) {       
+function StockChart({ subscribedStock, authorized, stockData, getStockData }) {       
     useEffect(() => {
         if(
             Object.keys(stockData).find(key => key === 'Note') === 'Note' ||
@@ -63,6 +64,13 @@ function StockChart({ subscribedStock, authorized, getStockData, stockData }) {
             </div>
         </div>
     )
+}
+
+StockChart.propTypes = {
+    subscribedStock: PropTypes.string,
+    authorized: PropTypes.bool.isRequired,
+    stockData : PropTypes.object,
+    getStockData: PropTypes.func.isRequired,
 }
 
 export default connect(

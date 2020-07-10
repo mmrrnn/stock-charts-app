@@ -14,10 +14,10 @@ import {
 } from '../constants';
 
 const initialState = {
-    authorized: null,
-    username: undefined,
-    subscribedStock: undefined,
-    loadingState: null,
+    authorized: false,
+    username: null,
+    subscribedStock: null,
+    loadingState: false,
     error: null
 }
 

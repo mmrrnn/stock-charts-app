@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
     USER_ADD,
     SIGN_IN,
@@ -68,4 +69,18 @@ export const toggleSubscribeStock = ({ stockSymbol, username }) => {
         promise,
         failureMessage: `Subscribing stock error, check the console!`
     }
+}
+
+addUser.propTypes = {
+    user: PropTypes.object.isRequired
+};
+
+signInUser.propTypes = {
+    username: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired
+}
+
+toggleSubscribeStock.propTypes = {
+    stockSymbol: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired
 }

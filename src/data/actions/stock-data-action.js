@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import {
     STOCK_DATA_GET
 } from '../constants';
 
-export const getStockData = ({ selectedStock, timeInterval}) => {
+export const getStockData = ({ selectedStock, timeInterval }) => {
     const stockSymbol = selectedStock ? selectedStock : 'GOOGL';
     const timeSeries = timeInterval === 'DAILY' || !timeInterval ? 'DAILY' : 'INTRADAY';
     const interval = timeInterval !== 'DAILY' ? `&interval=${timeInterval}` : '';
@@ -16,4 +17,9 @@ export const getStockData = ({ selectedStock, timeInterval}) => {
         promise,
         failureMessage: `Stock data fetching error, check the console!`
     }
+}
+
+getStockData.propTypes = {
+    selectedStock: PropTypes.string.isRequired,
+    timeInterval: PropTypes.string.isRequired
 }

@@ -1,11 +1,14 @@
 import React, { useEffect, useMemo, useCallback, createRef } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Chart } from 'react-charts';
 
 import { toggleSubscribeStock } from '../../data/actions/user-action';
 
 function StockChartSummary({ user, stockData, toggleSubscribeStock }) {    
-    const stockSymbol = stockData['Meta Data']['2. Symbol'];
+    const stockSymbol = Object.entries(stockData).length > 0 &&
+        Object.keys(stockData).find(key => key === 'Note') !== 'Note'
+            ? stockData['Meta Data']['2. Symbol'] : null;
     const chartData = useMemo(
         () => Object.entries(stockData[Object.keys(stockData)[1]])
             .reverse()
@@ -71,6 +74,12 @@ function StockChartSummary({ user, stockData, toggleSubscribeStock }) {
             />
         </div>
     )
+}
+
+StockChartSummary.propTypes = {
+    user: PropTypes.object.isRequired,
+    stockData : PropTypes.object.isRequired,
+    toggleSubscribeStock: PropTypes.func.isRequired    
 }
 
 export default connect(

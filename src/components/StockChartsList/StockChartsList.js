@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import StockChartSummary from '../StockChart/StockChartSummary';
 import { getStockData } from '../../data/actions/stock-data-action'
 
-function StockChartsList({ stockData = {}, getStockData, authorized }) {
+function StockChartsList({ authorized, stockData = {}, getStockData }) {
     const [selectedStock, setSelectedStock] = useState('GOOGL');
     
     useEffect(() => {
@@ -63,11 +64,17 @@ function StockChartsList({ stockData = {}, getStockData, authorized }) {
     )
 }
 
+StockChartsList.propTypes = {
+    authorized: PropTypes.bool.isRequired,
+    stockData: PropTypes.object.isRequired,
+    getStockData: PropTypes.func.isRequired    
+}
+
 export default connect(
     state => {
         return {
-            stockData: state.stockData.currentStockData,
-            authorized: state.user.authorized
+            authorized: state.user.authorized,
+            stockData: state.stockData.currentStockData
         }
     }, 
     { getStockData }

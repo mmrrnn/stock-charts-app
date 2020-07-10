@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -21,6 +22,10 @@ function SignedInLinks({ signOutUser }) {
             <button onClick={signOutUser} href="#">Sign Out</button>   
         </>
     )
+}
+
+SignedInLinks.propTypes = {
+    signOutUser: PropTypes.func.isRequired,
 }
 
 export default connect(null, { signOutUser })(SignedInLinks);

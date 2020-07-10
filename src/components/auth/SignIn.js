@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { signInUser } from '../../data/actions/user-action';
 
-function SignIn({ signInUser, authorized }) {
+function SignIn({ authorized, signInUser }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     
@@ -53,6 +54,12 @@ function SignIn({ signInUser, authorized }) {
             </div>
         </div>
     )
+}
+
+
+SignIn.propTypes = {
+    authorized: PropTypes.bool.isRequired,
+    signInUser: PropTypes.func.isRequired
 }
 
 export default connect(

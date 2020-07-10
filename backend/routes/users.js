@@ -16,7 +16,7 @@ router.route('/add').post((req, res, next) => {
 
   newUser.save()
     .then(() => res.json({ username, subscribedStock }))
-    .catch(err => res.json(err));
+    .catch(err => res.json({ error: true, message: "Incorrect username or password!" }));
 });
 
 router.route('/signin').post((req, res) => {
@@ -43,15 +43,6 @@ router.route('/subscribe').post((req, res) => {
   User.updateOne({ username }, { subscribedStock })
     .then(() => res.json({ subscribedStock }))
     .catch(err => res.json(err));
-
-  // var query = {'username': req.user.username};
-
-  // req.newData.username = req.user.subscribedStock;
-  
-  // MyModel.findOneAndUpdate(query, req.newData, {upsert: true}, function(err, doc) {
-  //     if (err) return res.send(500, {error: err});
-  //     return res.json( { subscribedStock: req.user.subscribedStock });
-  // });
 });
 
 module.exports = router;
