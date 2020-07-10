@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -11,20 +11,24 @@ function SignUp({ addUser, authorized }) {
     const [retypedPassword, setRetypedPassword] = useState('');
     const [signUpError, setsignUpError] = useState({});
     
-    if(authorized) return <Redirect to="/" />;
+    const handleSubmit = useCallback(
+        e => {
+            e.preventDefault();
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        const isDataCorrect = validate({ username, password, retypedPassword, signUpError, setsignUpError });
-        
-        if(isDataCorrect){
-            addUser({
-                username,
-                password,
-                subscribedStock: null
-            });
-        }
-    }
+            const isDataCorrect = validate({ username, password, retypedPassword, signUpError, setsignUpError });
+            
+            if(isDataCorrect){
+                addUser({
+                    username,
+                    password,
+                    subscribedStock: null
+                });
+            }
+        },
+        [addUser, username, password, retypedPassword, signUpError]
+    )
+
+    if(authorized) return <Redirect to="/" />;
 
     return (
         <div className="container">
@@ -42,7 +46,9 @@ function SignUp({ addUser, authorized }) {
                                 required
                                 onChange={e => setUsername(e.target.value)}
                             />
-                            { signUpError.username ? <div className="text-danger">Type correct username</div> : null }
+                            {signUpError.username 
+                                ? <div className="text-danger">Type correct username</div>
+                                : null}
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
@@ -54,7 +60,9 @@ function SignUp({ addUser, authorized }) {
                                 required
                                 onChange={e => setPassword(e.target.value)}
                             />
-                            { signUpError.password ? <div className="text-danger">Type correct password</div> : null }
+                            {signUpError.password 
+                                ? <div className="text-danger">Type correct password</div>
+                                : null}
                         </div>
                         <div className="form-group">
                             <label htmlFor="retypedPassword">Retype password</label>
@@ -66,7 +74,9 @@ function SignUp({ addUser, authorized }) {
                                 required
                                 onChange={e => setRetypedPassword(e.target.value)}
                             />
-                            { signUpError.retypedPassword ? <div className="text-danger">Passwords must be the same</div> : null }
+                            {signUpError.retypedPassword
+                                ? <div className="text-danger">Passwords must be the same</div>
+                                : null}
                         </div>
                         <button type="submit" className="btn btn-primary float-right">Submit</button>
                     </form>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useCallback, createRef } from 'react';
 import { connect } from 'react-redux';
 import { Chart } from 'react-charts';
 
@@ -6,17 +6,20 @@ import { toggleSubscribeStock } from '../../data/actions/user-action';
 
 function StockChartSummary({ user, stockData, toggleSubscribeStock }) {    
     const stockSymbol = stockData['Meta Data']['2. Symbol'];
-    const chartData = Object.entries(stockData[Object.keys(stockData)[1]])
-        .reverse()
-        .splice(50, 50)
-        .map(el => [el[0], el[1]['4. close']]);
-    const subscribeCheckbox = React.createRef();
+    const chartData = useMemo(
+        () => Object.entries(stockData[Object.keys(stockData)[1]])
+            .reverse()
+            .splice(50, 50)
+            .map(el => [el[0], el[1]['4. close']]),
+        [stockData]
+    );
+    const subscribeCheckbox = createRef();
 
     useEffect(() => {
         if(user.authorized)subscribeCheckbox.current.checked = user.subscribedStock === stockSymbol ? true : false; 
     }, [user.subscribedStock, stockSymbol, subscribeCheckbox, user.authorized])
     
-    const data = React.useMemo(
+    const data = useMemo(
         () => [
             {
                 label: stockSymbol,
@@ -26,7 +29,7 @@ function StockChartSummary({ user, stockData, toggleSubscribeStock }) {
         [chartData, stockSymbol]
     )
 
-    const axes = React.useMemo(
+    const axes = useMemo(
         () => [
             { primary: true, type: 'ordinal', position: 'bottom' },
             { type: 'linear', position: 'left' },
@@ -34,11 +37,14 @@ function StockChartSummary({ user, stockData, toggleSubscribeStock }) {
         []
     )
 
-    const handleClick = e => {
-        e.target.checked 
-            ? toggleSubscribeStock({ username: user.username, stockSymbol })
-            : toggleSubscribeStock({ username :user.username, stockSymbol: null });
-    }
+    const handleClick = useCallback(
+        e => {
+            e.target.checked 
+                ? toggleSubscribeStock({ username: user.username, stockSymbol })
+                : toggleSubscribeStock({ username: user.username, stockSymbol: null });
+        },
+        [user, stockSymbol, toggleSubscribeStock]
+    )
 
     return (
         <div

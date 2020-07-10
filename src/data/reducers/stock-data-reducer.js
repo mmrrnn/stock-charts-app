@@ -35,7 +35,7 @@ export default function stockData(state = initialState, action) {
 
             return {
                 ...state,
-                currentStockData: action.payload,
+                currentStockData: {},
                 error: action.payload,
                 loadingState: newLoadingState
             }

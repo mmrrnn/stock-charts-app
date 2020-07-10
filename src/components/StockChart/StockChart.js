@@ -1,38 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import StockChartSummary from './StockChartSummary';
 import { getStockData } from '../../data/actions/stock-data-action';
 
-function StockChart({ subscribedStock, authorized, getStockData, stockData }) {   
-    const [isCorrect, setIsCorrect] = useState(Object.entries(stockData).length);
-    
+function StockChart({ subscribedStock, authorized, getStockData, stockData }) {       
     useEffect(() => {
-        if(subscribedStock === null){
-            setIsCorrect(false);
-        } else if(stockData['Meta Data']['2. Symbol'] !== subscribedStock){
-            getStockData({ selectedStock: subscribedStock, timeInterval: "DAILY" })
+        if(
+            Object.keys(stockData).find(key => key === 'Note') === 'Note' ||
+            (Object.entries(stockData).length && stockData['Meta Data']['2. Symbol'] !== subscribedStock) ||
+            Object.entries(stockData).length === 0
+        ){
+            getStockData({ selectedStock: subscribedStock, timeInterval: "DAILY" });
         }
-    }, [subscribedStock, stockData, getStockData])
+    }, [subscribedStock, stockData, getStockData]);
+
+    const handleClick = useCallback(
+        e => {
+            const timeInterval = e.target.name;
     
-    if (authorized !== true) {
-        return <Redirect to="/" />;
-    };
-
-    const handleClick = e => {
-        const timeInterval = e.target.name;
-
-        if(subscribedStock){
-            getStockData({ selectedStock: subscribedStock, timeInterval })
-        }
-    }
+            if(subscribedStock){
+                getStockData({ selectedStock: subscribedStock, timeInterval })
+            }
+        },
+        [getStockData, subscribedStock]
+    )
+    
+    if (authorized !== true) return <Redirect to="/" />;
 
     return (
         <div className="container">
             <h2 className="text-center text-primary">Subscribed Stock Chart</h2>
             
-            {isCorrect ? <StockChartSummary stockData={stockData}/> : null}
+            {Object.entries(stockData).length > 0 && subscribedStock !== null 
+                ? <StockChartSummary stockData={stockData}/> 
+                : null}
 
             <div className="row mt-6">
                 <div className="col-12 d-flex justify-content-center">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 
 import StockChartSummary from '../StockChart/StockChartSummary';
@@ -8,20 +8,28 @@ function StockChartsList({ stockData = {}, getStockData, authorized }) {
     const [selectedStock, setSelectedStock] = useState('GOOGL');
     
     useEffect(() => {
-        if(Object.entries(stockData).length){
+        if(
+            Object.entries(stockData).length > 0 &&
+            Object.keys(stockData).find(key => key === 'Note') !== 'Note'
+        ){
             setSelectedStock(stockData['Meta Data']['2. Symbol'])
         }
     }, [authorized, stockData])
 
-    const handleChange = e => {
-        setSelectedStock(e.target.value);
-    }
+    const handleChange = useCallback(
+        e => {
+            setSelectedStock(e.target.value);
+        },
+        [setSelectedStock]
+    );
 
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        getStockData({ selectedStock });
-    }
+    const handleSubmit = useCallback(
+        e => {
+            e.preventDefault();
+            getStockData({ selectedStock });
+        },
+        [getStockData, selectedStock]
+    )
 
     return (
         <div className="container">

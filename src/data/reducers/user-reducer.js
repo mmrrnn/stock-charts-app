@@ -24,6 +24,7 @@ const initialState = {
 export default function user(state = initialState, action) {
     const newLoadingState = { ...state.loadingState };
 
+    // USER_ADD
     switch (action.type) {
         case USER_ADD_REQUEST:
             return {
@@ -57,7 +58,6 @@ export default function user(state = initialState, action) {
             }
 
         // SIGN IN 
-
         case SIGN_IN_REQUEST:
             return {
                 ...state,
@@ -99,7 +99,6 @@ export default function user(state = initialState, action) {
             };
 
         // TOGGLE SUBSCRIBE
-        
         case TOGGLE_SUBSCRIBE_STOCK_REQUEST:
             return {
                 ...state,

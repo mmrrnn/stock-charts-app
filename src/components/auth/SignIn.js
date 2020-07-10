@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -8,13 +8,16 @@ function SignIn({ signInUser, authorized }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     
-    if (authorized) return <Redirect to='/' />;
+    const handleSubmit = useCallback(
+        e => {
+            e.preventDefault();
+            
+            signInUser({ username, password });
+        }, 
+        [username, password, signInUser]
+    )
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        
-        signInUser({ username, password });
-    }
+    if (authorized) return <Redirect to='/' />;
 
     return (
         <div className="container">
