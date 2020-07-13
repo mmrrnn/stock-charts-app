@@ -39,10 +39,7 @@ function StockChartSummary({ user, stockData, toggleSubscribeStock }) {
 
     useEffect(() => {
         if(user.authorized){
-            const isCheckboxChecked = user.subscribedStock === stockSymbol
-                ? true : false;
-
-            subscribeCheckbox.current.checked = isCheckboxChecked;
+            subscribeCheckbox.current.checked = user.subscribedStock === stockSymbol;
         } 
     }, [user.subscribedStock, stockSymbol, subscribeCheckbox, user.authorized])
     
