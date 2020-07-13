@@ -25,9 +25,9 @@ router.route('/signin').post((req, res) => {
         return user.username === username && user.password === password;
       })
     })
-    .then(foundedUser => res.json({
-      username: foundedUser.username,
-      subscribedStock: foundedUser.subscribedStock
+    .then(foundUser => res.json({
+      username: foundUser.username,
+      subscribedStock: foundUser.subscribedStock
     }))
     .catch(err => res.json({ error: true, message: "Incorrect username or password!" }));
 });
