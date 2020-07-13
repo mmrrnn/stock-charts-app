@@ -5,7 +5,7 @@ import {
 
 export const getStockData = ({ selectedStock, timeInterval }) => {
     const stockSymbol = selectedStock ? selectedStock : 'GOOGL';
-    const timeSeries = timeInterval === 'DAILY' || !timeInterval ? 'DAILY' : 'INTRADAY';
+    const timeSeries = timeInterval && timeInterval !== 'DAILY' ? 'INTRADAY' : 'DAILY';
     const interval = timeInterval !== 'DAILY' ? `&interval=${timeInterval}` : '';
 
     const promise = fetch(

@@ -1,21 +1,29 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import StockChartSummary from '../StockChart/StockChartSummary';
-import { getStockData } from '../../data/actions/stock-data-action'
+import { getStockData } from '../../data/actions/stockDataActions'
+
+const OptionalStockChartSummary = ({ stockData }) => {
+    const condition = typeof stockData['Time Series (Daily)'] !== 'undefined';
+
+    return condition
+        ? <StockChartSummary stockData={stockData}/> : '';
+}
 
 function StockChartsList({ authorized, stockData = {}, getStockData }) {
     const [selectedStock, setSelectedStock] = useState('GOOGL');
+    const isDataCorrect = useMemo(
+        () => Object.entries(stockData).length > 0 && !('Note' in stockData),
+        [stockData]
+    );
     
     useEffect(() => {
-        if(
-            Object.entries(stockData).length > 0 &&
-            Object.keys(stockData).find(key => key === 'Note') !== 'Note'
-        ){
+        if(isDataCorrect){
             setSelectedStock(stockData['Meta Data']['2. Symbol'])
         }
-    }, [authorized, stockData])
+    }, [authorized, stockData, isDataCorrect])
 
     const handleChange = useCallback(
         e => {
@@ -55,11 +63,7 @@ function StockChartsList({ authorized, stockData = {}, getStockData }) {
                 </div>
             </div>
 
-            {
-                typeof stockData['Time Series (Daily)'] !== 'undefined'
-                    ? <StockChartSummary stockData={stockData}/> 
-                    : null
-            }
+            <OptionalStockChartSummary stockData={stockData} />            
         </div>
     )
 }

@@ -8,7 +8,9 @@ function SignedOutLinks() {
     
     return (
         <>
-            <div id="stock-charts-brand">Stock Charts</div>
+            <div id="stock-charts-brand">
+                <Link to="/">Stock Charts</Link>
+            </div>
             <Ul>
                 <li className={location.pathname === '/signin' ? 'active' : null}>
                     <Link to="/signin">Sign In</Link>

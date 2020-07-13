@@ -1,21 +1,35 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import StockChartSummary from './StockChartSummary';
-import { getStockData } from '../../data/actions/stock-data-action';
+import { getStockData } from '../../data/actions/stockDataActions';
+
+const OptionalStockSummary = ({ isDataCorrect, stockData }) => {
+    return isDataCorrect ? <StockChartSummary stockData={stockData}/> : '';
+}
+
+const hasWrongkData = ({ stockData, subscribedStock }) => {
+    const entries = Object.entries(stockData);
+    const condition = 'Note' in stockData || !entries.length
+        ? true
+        : subscribedStock && stockData['Meta Data']['2. Symbol'] !== subscribedStock;
+    
+    return condition;
+}
 
 function StockChart({ subscribedStock, authorized, stockData, getStockData }) {       
+    const isDataCorrect = useMemo(
+        () => !hasWrongkData({ stockData, subscribedStock }),
+        [stockData, subscribedStock]
+    );
+    
     useEffect(() => {
-        if(
-            Object.keys(stockData).find(key => key === 'Note') === 'Note' ||
-            (Object.entries(stockData).length && stockData['Meta Data']['2. Symbol'] !== subscribedStock) ||
-            Object.entries(stockData).length === 0
-        ){
+        if(isDataCorrect === false){
             getStockData({ selectedStock: subscribedStock, timeInterval: "DAILY" });
         }
-    }, [subscribedStock, stockData, getStockData]);
+    }, [subscribedStock, getStockData, isDataCorrect]);
 
     const handleClick = useCallback(
         e => {
@@ -34,9 +48,7 @@ function StockChart({ subscribedStock, authorized, stockData, getStockData }) {
         <div className="container">
             <h2 className="text-center text-primary">Subscribed Stock Chart</h2>
             
-            {Object.entries(stockData).length > 0 && subscribedStock !== null 
-                ? <StockChartSummary stockData={stockData}/> 
-                : null}
+            <OptionalStockSummary isDataCorrect={isDataCorrect} stockData={stockData} />
 
             <div className="row mt-6">
                 <div className="col-12 d-flex justify-content-center">

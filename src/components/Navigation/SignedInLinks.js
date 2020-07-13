@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { Ul } from './Navigation.css';
-import { signOutUser } from '../../data/actions/user-action';
+import { signOutUser } from '../../data/actions/userActions';
 
 function SignedInLinks({ signOutUser }) {
     const location = useLocation();

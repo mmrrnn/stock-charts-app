@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { signInUser } from '../../data/actions/user-action';
+import { signInUser } from '../../data/actions/userActions';
 
 function SignIn({ authorized, signInUser }) {
     const [username, setUsername] = useState('');

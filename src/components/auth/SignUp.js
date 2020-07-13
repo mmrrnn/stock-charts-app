@@ -4,32 +4,40 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { validate } from './validate';
-import { addUser } from '../../data/actions/user-action';
+import { addUser } from '../../data/actions/userActions';
+
+const getInputClassName = ({ inputName, errorObject }) => {
+    const condition = inputName in errorObject;
+    
+    return condition ? 'form-control is-invalid' : 'form-control';
+}
 
 function SignUp({ authorized, addUser }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [retypedPassword, setRetypedPassword] = useState('');
     const [signUpError, setsignUpError] = useState({});
-    
+
     const handleSubmit = useCallback(
         e => {
             e.preventDefault();
+            const errorObject = validate({ username, password, retypedPassword });
+            const isDataCorrect = Object.keys(errorObject).length === 0;
 
-            const isDataCorrect = validate({ username, password, retypedPassword, signUpError, setsignUpError });
-            
-            if(isDataCorrect){
+            if (isDataCorrect) {
                 addUser({
                     username,
                     password,
                     subscribedStock: null
                 });
+            } else {
+                setsignUpError(errorObject);
             }
         },
-        [addUser, username, password, retypedPassword, signUpError]
+        [addUser, username, password, retypedPassword]
     )
 
-    if(authorized) return <Redirect to="/" />;
+    if (authorized) return <Redirect to="/" />;
 
     return (
         <div className="container">
@@ -41,43 +49,58 @@ function SignUp({ authorized, addUser }) {
                             <label htmlFor="username">Username</label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={
+                                    getInputClassName({
+                                        inputName: 'username',
+                                        errorObject: signUpError
+                                    })
+                                }
                                 id="username"
                                 aria-describedby="usernameHelp"
                                 required
                                 onChange={e => setUsername(e.target.value)}
                             />
-                            {signUpError.username 
-                                ? <div className="text-danger">Type correct username</div>
-                                : null}
+                            <div className="invalid-feedback">
+                                Please provide a valid username.
+                            </div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
                             <input
                                 type="password"
-                                className="form-control"
+                                className={
+                                    getInputClassName({
+                                        inputName: 'password',
+                                        errorObject: signUpError
+                                    })
+                                }
                                 id="password"
                                 autoComplete="false"
                                 required
                                 onChange={e => setPassword(e.target.value)}
                             />
-                            {signUpError.password 
-                                ? <div className="text-danger">Type correct password</div>
-                                : null}
+                            <div className="invalid-feedback">
+                                Please provide a valid password.
+                            </div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="retypedPassword">Retype password</label>
                             <input
                                 type="password"
-                                className="form-control"
+                                className={
+                                    getInputClassName({
+                                        inputName: 'retypedPassword',
+                                        errorObject: signUpError
+                                    })
+                                }
                                 id="retypedPassword"
                                 autoComplete="false"
                                 required
                                 onChange={e => setRetypedPassword(e.target.value)}
                             />
-                            {signUpError.retypedPassword
-                                ? <div className="text-danger">Passwords must be the same</div>
-                                : null}
+                            <div className="invalid-feedback">
+                                Passwords must be the same.
+                            </div>
                         </div>
                         <button type="submit" className="btn btn-primary float-right">Submit</button>
                     </form>

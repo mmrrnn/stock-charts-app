@@ -3,23 +3,47 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Chart } from 'react-charts';
 
-import { toggleSubscribeStock } from '../../data/actions/user-action';
+import { toggleSubscribeStock } from '../../data/actions/userActions';
+
+const getStockSymbol = stockData => {
+    const metaDataKey = Object.keys(stockData)[0];
+    const symbolKey = Object.keys(stockData[metaDataKey])[1];
+    const stockSymbol = Object.entries(stockData).length > 0 && !('Note' in stockData) 
+        ? stockData[metaDataKey][symbolKey] : null;
+
+    return stockSymbol;
+};
+
+const getChartData = stockData => {
+    const timeSeriesKey = Object.keys(stockData)[1]; 
+    const timeSeriesData = Object.entries(stockData[timeSeriesKey]);
+    const closeKey = Object.keys(timeSeriesData[0][1])[3];
+    const chartData = timeSeriesData
+        .reverse()
+        .splice(50, 50)
+        .map(el => [el[0], el[1][closeKey]]);
+
+    return chartData;
+}
 
 function StockChartSummary({ user, stockData, toggleSubscribeStock }) {    
-    const stockSymbol = Object.entries(stockData).length > 0 &&
-        Object.keys(stockData).find(key => key === 'Note') !== 'Note'
-            ? stockData['Meta Data']['2. Symbol'] : null;
+    const stockSymbol = useMemo(
+        () => getStockSymbol(stockData),
+        [stockData]
+    );
     const chartData = useMemo(
-        () => Object.entries(stockData[Object.keys(stockData)[1]])
-            .reverse()
-            .splice(50, 50)
-            .map(el => [el[0], el[1]['4. close']]),
+        () => getChartData(stockData),
         [stockData]
     );
     const subscribeCheckbox = createRef();
 
     useEffect(() => {
-        if(user.authorized)subscribeCheckbox.current.checked = user.subscribedStock === stockSymbol ? true : false; 
+        if(user.authorized){
+            const isCheckboxChecked = user.subscribedStock === stockSymbol
+                ? true : false;
+
+            subscribeCheckbox.current.checked = isCheckboxChecked;
+        } 
     }, [user.subscribedStock, stockSymbol, subscribeCheckbox, user.authorized])
     
     const data = useMemo(
@@ -42,9 +66,13 @@ function StockChartSummary({ user, stockData, toggleSubscribeStock }) {
 
     const handleClick = useCallback(
         e => {
-            e.target.checked 
-                ? toggleSubscribeStock({ username: user.username, stockSymbol })
-                : toggleSubscribeStock({ username: user.username, stockSymbol: null });
+            const stockSymbolToSubscribe = e.target.checked
+                ? stockSymbol : null;
+
+            toggleSubscribeStock({
+                username: user.username,
+                stockSymbol: stockSymbolToSubscribe
+            })
         },
         [user, stockSymbol, toggleSubscribeStock]
     )

@@ -1,42 +1,33 @@
 import PropTypes from 'prop-types';
 
-export const validate = ({ username, password, retypedPassword, signUpError, setsignUpError }) => {
-    let isCorrect = true;
+export const validate = ({ username, password, retypedPassword }) => {
+    let errorObject = {};
 
-    if (username.length < 3 || /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/.test(username)) {
-        setsignUpError({
-            ...signUpError,
+    if (username.length < 3 || !/^[a-z0-9_-]{3,16}$/.test(username)) {
+        errorObject = {
             username: true
-        });
-
-        isCorrect = false;
+        }
     }
 
-    if (password.length < 3 || /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/.test(password)) {
-        setsignUpError({
-            ...signUpError,
+    if (password.length < 4 || !/^[a-z0-9_-]{4,18}$/.test(password)) {
+        errorObject = {
+            ...errorObject,
             password: true
-        });
-
-        isCorrect = false;
+        }
     }
 
     if (retypedPassword !== password) {
-        setsignUpError({
-            ...signUpError,
+        errorObject = {
+            ...errorObject,
             retypedPassword: true
-        });
-
-        isCorrect = false;
+        }
     }
 
-    return isCorrect;
+    return errorObject;
 }
 
 validate.propTypes = {
     username: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
-    retypedPassword: PropTypes.string.isRequired,
-    signUpError: PropTypes.object.isRequired,
-    setSignUpError: PropTypes.func.isRequired
+    retypedPassword: PropTypes.string.isRequired
 }

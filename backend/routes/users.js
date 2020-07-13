@@ -8,37 +8,32 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/add').post((req, res, next) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  const subscribedStock = req.body.subscribedStock;
-
+  const { username, password, subscribedStock } = req.body;
   const newUser = new User({ username, password, subscribedStock });
 
   newUser.save()
     .then(() => res.json({ username, subscribedStock }))
-    .catch(err => res.json({ error: true, message: "Incorrect username or password!" }));
+    .catch(err => res.json({ error: true, message: "This username already exists!" }));
 });
 
 router.route('/signin').post((req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username, password } = req.body;
 
   User.find()
     .then(users => {
-      return users.filter(user => {
+      return users.find(user => {
         return user.username === username && user.password === password;
       })
     })
-    .then(filteredUser => res.json({
-      username: filteredUser[0].username,
-      subscribedStock: filteredUser[0].subscribedStock
+    .then(foundedUser => res.json({
+      username: foundedUser.username,
+      subscribedStock: foundedUser.subscribedStock
     }))
     .catch(err => res.json({ error: true, message: "Incorrect username or password!" }));
 });
 
 router.route('/subscribe').post((req, res) => {
-  const username = req.body.username;
-  const subscribedStock = req.body.subscribedStock;
+  const { username, subscribedStock } = req.body;
 
   User.updateOne({ username }, { subscribedStock })
     .then(() => res.json({ subscribedStock }))
