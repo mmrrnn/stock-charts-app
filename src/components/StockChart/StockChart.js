@@ -7,7 +7,7 @@ import StockChartSummary from './StockChartSummary';
 import { getStockData } from '../../data/actions/stockDataActions';
 
 const OptionalStockSummary = ({ isDataCorrect, stockData }) => {
-    return isDataCorrect ? <StockChartSummary stockData={stockData}/> : '';
+    if(isDataCorrect)return <StockChartSummary stockData={stockData}/>;
 }
 
 const hasWrongkData = ({ stockData, subscribedStock }) => {

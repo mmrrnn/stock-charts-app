@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 export const validate = ({ username, password, retypedPassword }) => {
     let errorObject = {};
 
-    if (username.length < 3 || !/^[a-z0-9_-]{3,16}$/.test(username)) {
+    if (!/^[a-z0-9_-]{3,16}$/.test(username)) {
         errorObject = {
             username: true
         }
     }
 
-    if (password.length < 4 || !/^[a-z0-9_-]{4,18}$/.test(password)) {
+    if (!/^[a-z0-9_-]{4,18}$/.test(password)) {
         errorObject = {
             ...errorObject,
             password: true

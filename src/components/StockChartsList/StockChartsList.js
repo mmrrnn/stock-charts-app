@@ -8,8 +8,7 @@ import { getStockData } from '../../data/actions/stockDataActions'
 const OptionalStockChartSummary = ({ stockData }) => {
     const condition = typeof stockData['Time Series (Daily)'] !== 'undefined';
 
-    return condition
-        ? <StockChartSummary stockData={stockData}/> : '';
+    if(condition)return <StockChartSummary stockData={stockData}/>;
 }
 
 function StockChartsList({ authorized, stockData = {}, getStockData }) {
