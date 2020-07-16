@@ -7,9 +7,7 @@ import { validate } from './validate';
 import { addUser } from '../../data/actions/userActions';
 
 const getInputClassName = ({ inputName, errorObject }) => {
-    const condition = inputName in errorObject;
-    
-    return condition ? 'form-control is-invalid' : 'form-control';
+    return `form-control ${inputName in errorObject ? 'is-invalid' : ''}`;
 }
 
 function SignUp({ authorized, addUser }) {

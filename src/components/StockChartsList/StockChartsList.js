@@ -3,24 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import StockChartSummary from '../StockChart/StockChartSummary';
-import { getStockData } from '../../data/actions/stockDataActions'
+import { getStockData } from '../../data/actions/stockDataActions';
+import { stockDataMapper } from '../../function/stockDataMapper';
 
 const OptionalStockChartSummary = ({ stockData }) => {
-    const condition = typeof stockData['Time Series (Daily)'] !== 'undefined';
-
-    if(condition)return <StockChartSummary stockData={stockData}/>;
+    return stockData.chartData.length ? <StockChartSummary stockData={stockData}/> : null;
 }
 
 function StockChartsList({ authorized, stockData = {}, getStockData }) {
     const [selectedStock, setSelectedStock] = useState('GOOGL');
     const isDataCorrect = useMemo(
-        () => Object.entries(stockData).length > 0 && !('Note' in stockData),
+        () => stockData.chartData.length > 0 && !('note' in stockData),
         [stockData]
     );
     
     useEffect(() => {
         if(isDataCorrect){
-            setSelectedStock(stockData['Meta Data']['2. Symbol'])
+            setSelectedStock(stockData.stockSymbol)
         }
     }, [authorized, stockData, isDataCorrect])
 
@@ -77,7 +76,7 @@ export default connect(
     state => {
         return {
             authorized: state.user.authorized,
-            stockData: state.stockData.currentStockData
+            stockData: stockDataMapper(state.stockData.currentStockData)
         }
     }, 
     { getStockData }

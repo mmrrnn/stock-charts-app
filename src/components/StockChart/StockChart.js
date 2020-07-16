@@ -5,16 +5,16 @@ import { connect } from 'react-redux';
 
 import StockChartSummary from './StockChartSummary';
 import { getStockData } from '../../data/actions/stockDataActions';
+import { stockDataMapper } from '../../function/stockDataMapper';
 
 const OptionalStockSummary = ({ isDataCorrect, stockData }) => {
-    if(isDataCorrect)return <StockChartSummary stockData={stockData}/>;
+    return isDataCorrect ? <StockChartSummary stockData={stockData}/> : null;
 }
 
 const hasWrongkData = ({ stockData, subscribedStock }) => {
-    const entries = Object.entries(stockData);
-    const condition = 'Note' in stockData || !entries.length
+    const condition = 'note' in stockData || !stockData.chartData.length
         ? true
-        : subscribedStock && stockData['Meta Data']['2. Symbol'] !== subscribedStock;
+        : !subscribedStock || stockData.stockSymbol !== subscribedStock;
     
     return condition;
 }
@@ -90,7 +90,7 @@ export default connect(
         return {
             subscribedStock: state.user.subscribedStock,
             authorized: state.user.authorized,
-            stockData: state.stockData.currentStockData
+            stockData: stockDataMapper(state.stockData.currentStockData)
         }
     },
     { getStockData }
